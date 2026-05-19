@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasquale | Cybersecurity Hub</title>
+    <!-- Importazione dei font perfettamente coordinati: Rajdhani (Cybersecurity/HUD) + Fira Code (Codice puro) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #010204;
+            --accent: #0088ff;
+            --accent-cyan: #00f0ff;
+            --accent-glow: rgba(0, 136, 255, 0.45);
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --font-tech: 'Rajdhani', sans-serif; /* Font tecnico d'elite, squadrato, pulito e cyber-defense */
+            --font-code: 'Fira Code', monospace; /* Font coordinato per elementi di comando e bio */
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* BLOCCO SCROLL GLOBALE: Impedisce completamente lo scorrimento con rotellina o trascinamento touch */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Elimina scrollbar e blocca il movimento */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-tech);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* SFONDO STILE IOS: Sfere di colore sfocate che creano l'effetto wallpaper dinamico sotto il vetro */
+        .ios-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.45;
+        }
+
+        /* Sorgente di luce centrale principale posizionata ESATTAMENTE dietro la scheda per esaltare il vetro */
+        .blob-center {
+            width: 440px;
+            height: 440px;
+            background: radial-gradient(circle, rgba(0, 102, 255, 0.25) 0%, rgba(112, 0, 255, 0.12) 50%, transparent 100%);
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulseGlow 10s infinite alternate ease-in-out;
+        }
+
+        .blob-1 {
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, #0052d6 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation: floatLeftBlob 15s infinite alternate ease-in-out;
+        }
+
+        .blob-2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #00c3ff 0%, transparent 70%);
+            bottom: 15%;
+            right: 10%;
+            animation: floatRightBlob 12s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.35; }
+            100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.55; }
+        }
+
+        @keyframes floatLeftBlob {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(40px, -20px); }
+        }
+
+        @keyframes floatRightBlob {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-40px, 30px); }
+        }
+
+        /* Canvas per il Cervello Cibernetico e Codice Binario */
+        #cyber-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none; /* Lascia passare i click */
+        }
+
+        /* Container: Lastra di cristallo temperato iOS ultra-trasparente e stabile */
+        .container {
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            z-index: 2; /* Posizionato sopra il canvas e le sfere di luce */
+            
+            /* Forza il perfetto allineamento centrale di tutti i blocchi interni */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            
+            /* iOS Glassmorphism REALE: Trasparenza cristallina pazzesca che riflette i blob colorati */
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(14px) saturate(220%);
+            -webkit-backdrop-filter: blur(14px) saturate(220%);
+            
+            /* Bordo ultra-sottile di riflesso luce bianca (Riflesso di cristallo dei vetri Apple) */
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 36px; /* Più arrotondato in stile widget Apple */
+            padding: 44px 30px;
+            
+            /* Ombreggiatura multilivello 3D che simula lo spessore e il sollevamento del vetro */
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.4),
+                0 30px 80px rgba(0, 0, 0, 0.8),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                0 0 50px rgba(0, 136, 255, 0.04);
+        }
+
+        /* SELETTORE LINGUA STILE IOS SEGMENTED CONTROL */
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2px;
+            border-radius: 12px;
+            z-index: 10;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .lang-btn {
+            font-family: var(--font-code);
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            background: transparent;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), 0 0 8px rgba(0, 136, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3px 9px; /* Compensa la presenza del bordo */
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 15px; /* Spazio per evitare sovrapposizioni con il selettore lingua */
+        }
+
+        /* STRUTTURA DEL MICROCHIP QUANTISTICO (iOS Glossy Processore) */
+        .microchip {
+            position: relative;
+            display: inline-flex; /* Flexbox per evitare i margini invisibili degli elementi inline-block */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.02); /* Substrato di vetro ultra-leggero */
+            border: 1px solid rgba(0, 136, 255, 0.35); /* Bordo neon azzurrato */
+            border-radius: 16px;
+            padding: 16px 36px;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* Bagliore olografico esterno e interno */
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2),
+                0 0 15px rgba(0, 136, 255, 0.15);
+        }
+
+        /* Angoli metallici HUD del microchip quantistico */
+        .chip-corner {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1.5px solid var(--accent-cyan); /* Angoli cyan neon coordinati */
+            filter: drop-shadow(0 0 2px var(--accent-cyan));
+            opacity: 0.8;
+        }
+        .chip-corner.tl { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+        .chip-corner.tr { top: 6px; right: 6px; border-left: none; border-bottom: none; }
+        .chip-corner.bl { bottom: 6px; left: 6px; border-right: none; border-top: none; }
+        .chip-corner.br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
+
+        /* Pin di connessione neon (Piedini a Luce Liquida) */
+        .chip-pin {
+            position: absolute;
+            width: 10px;
+            height: 3px;
+            /* Gradiente a luce liquida cyan-azzurra */
+            background: linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent) 100%);
+            border-radius: 2px;
+            box-shadow: 0 0 8px var(--accent-cyan);
+            opacity: 0.9;
+        }
+        .chip-pin.left { left: -10px; }
+        .chip-pin.right { right: -10px; transform: scaleX(-1); } /* Specchia il gradiente a destra */
+
+        /* Placca di silicio interna coordinata */
+        .chip-core {
+            background: rgba(4, 8, 16, 0.5); /* Sfondo scuro e trasparente coordinato */
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 12px 28px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Nome Pasquale inciso e illuminato all'interno del nucleo */
+        .name {
+            font-family: var(--font-tech);
+            font-size: clamp(2.4rem, 8vw, 3.4rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: -0.05em; /* Compensa perfettamente l'offset spaziale dell'ultima lettera */
+            line-height: 0.95;
+            background: linear-gradient(180deg, #ffffff 10%, #8ac1ff 60%, #0066ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-text-stroke: 0.3px rgba(255, 255, 255, 0.2);
+            filter: 
+                drop-shadow(0 1px 1px rgba(0,0,0,0.9))
+                drop-shadow(0 0 10px rgba(0, 136, 255, 0.5));
+        }
+
+        /* CONTENITORE SLEEK BADGE PER IL TERMINALE */
+        .handle-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 136, 255, 0.04);
+            border: 1px solid rgba(0, 136, 255, 0.22);
+            padding: 6px 20px;
+            border-radius: 14px;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+        }
+
+        .handle-wrapper:hover {
+            background: rgba(0, 136, 255, 0.08);
+            border-color: rgba(0, 136, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 136, 255, 0.15);
+        }
+
+        /* Handle in stile Terminal Prompt con cursore lampeggiante e font Fira Code */
+        .handle {
+            font-family: var(--font-code);
+            color: var(--accent);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            text-transform: lowercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 0 10px rgba(0, 136, 255, 0.4);
+        }
+
+        /* Simbolo del prompt di comando */
+        .handle::before {
+            content: '>';
+            color: #ffffff;
+            margin-right: 8px;
+            opacity: 0.5;
+            font-weight: 700;
+        }
+
+        /* Cursore del terminale lampeggiante */
+        .handle::after {
+            content: '_';
+            color: var(--accent);
+            animation: cursorBlink 1.1s step-end infinite;
+            margin-left: 1px;
+            font-weight: 700;
+        }
+
+        @keyframes cursorBlink {
+            from, to { color: transparent }
+            50% { color: var(--accent) }
+        }
+
+        /* Bio Tag: Integrato splendidamente nell'estetica trasparente della scheda */
+        .bio-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 22px;
+            border-radius: 100px;
+            color: #e2e8f0;
+            font-family: var(--font-code);
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2.2rem;
+            transition: var(--transition);
+        }
+
+        .bio-tag:hover {
+            border-color: rgba(0, 136, 255, 0.5);
+            background: rgba(0, 136, 255, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .bio-icon {
+            width: 15px;
+            height: 15px;
+            stroke: var(--accent);
+            stroke-width: 2.2;
+            fill: none;
+        }
+
+        .bio-divider {
+            color: var(--accent);
+            opacity: 0.5;
+            font-weight: 700;
+            margin: 0 4px;
+        }
+
+        /* Griglia Social integrata nel vetro */
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px; /* Ridotto leggermente per far spazio a 5 icone su mobile */
+            margin-bottom: 2.5rem;
+            width: 100%;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            color: #ffffff;
+            text-decoration: none;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-link svg {
+            width: 21px;
+            height: 21px;
+            transition: var(--transition);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
+        /* Stati Hover con i colori ufficiali attivi */
+        .social-link:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 8px 20px rgba(0, 136, 255, 0.3);
+        }
+
+        .social-link.tiktok:hover { color: #00f2ea; }
+        .social-link.instagram:hover { color: #ff3d77; }
+        .social-link.telegram:hover { color: #229ED9; } /* Colore ufficiale Telegram */
+        .social-link.youtube:hover { color: #ff0000; }
+        .social-link.linkedin:hover { color: #00a0dc; }
+
+        /* Gruppo Pulsanti Principali */
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .btn {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 18px 24px;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 18px;
+            font-family: var(--font-tech);
+            font-size: 1.05rem; 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            transition: var(--transition);
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+            stroke: var(--accent);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 136, 255, 0.4);
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 136, 255, 0.1);
+        }
+
+        .btn:hover::after {
+            width: 6px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                overflow-y: auto; /* Permette lo scrolling su mobile */
+                padding: 15px 10px;
+            }
+            .container {
+                padding: 35px 20px;
+                border-radius: 28px;
+            }
+            .name { font-size: 2.8rem; }
+            .social-link { width: 44px; height: 44px; }
+            .bio-tag { font-size: 0.8rem; padding: 8px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- iOS Wallpaper Blobs per rendere il vetro reale e visibile -->
+    <div class="ios-blob blob-center"></div>
+    <div class="ios-blob blob-1"></div>
+    <div class="ios-blob blob-2"></div>
+
+    <!-- Canvas per il background cyber-cervello + binario -->
+    <canvas id="cyber-canvas"></canvas>
+
+    <div class="container" id="main-glass-panel">
+        
+        <!-- Segmented Language Control stile iOS -->
+        <div class="lang-selector">
+            <button class="lang-btn active" id="btn-it" onclick="setLanguage('it')">IT</button>
+            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">EN</button>
+        </div>
+
+        <header>
+            <!-- Spettacolare microchip tridimensionale con contatti, pin dorati e nome Pasquale inciso -->
+            <div class="microchip">
+                <!-- Contatti dorati sugli angoli -->
+                <div class="chip-corner tl"></div>
+                <div class="chip-corner tr"></div>
+                <div class="chip-corner bl"></div>
+                <div class="chip-corner br"></div>
+
+                <!-- Pin di alimentazione fisici sul lato sinistro -->
+                <div class="chip-pin left" style="top: 18%"></div>
+                <div class="chip-pin left" style="top: 38%"></div>
+                <div class="chip-pin left" style="top: 58%"></div>
+                <div class="chip-pin left" style="top: 78%"></div>
+
+                <!-- Pin di alimentazione fisici sul lato destro -->
+                <div class="chip-pin right" style="top: 18%"></div>
+                <div class="chip-pin right" style="top: 38%"></div>
+                <div class="chip-pin right" style="top: 58%"></div>
+                <div class="chip-pin right" style="top: 78%"></div>
+
+                <!-- Placca di silicio interna -->
+                <div class="chip-core">
+                    <h1 class="name">Pasquale</h1>
+                </div>
+            </div>
+            
+            <!-- Sleek Badge terminale coordinata ed elegante -->
+            <div class="handle-wrapper">
+                <span class="handle">pastech</span>
+            </div>
+            
+            <!-- Bio Tag: cybersecurity e hacker etico uniti in un'unica riga orizzontale posizionata sotto -->
+            <div>
+                <div class="bio-tag">
+                    <svg class="bio-icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span id="text-bio">Cybersecurity | Hacker Etico</span>
+                </div>
+            </div>
+            
+            <div class="social-grid">
+                <!-- TikTok -->
+                <a href="https://www.tiktok.com/@_pastech_?is_from_webapp=1&sender_device=pc" class="social-link tiktok" aria-label="TikTok">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.3-.79.51-1.28 1.43-1.35 2.36-.06 1.27.4 2.56 1.35 3.38.95.83 2.25 1.1 3.5.87 1.26-.2 2.36-1.02 2.89-2.1.29-.57.39-1.21.37-1.84-.03-3.13-.03-6.27-.03-9.41z"/></svg>
+                </a>
+                
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/_pastech_/" class="social-link instagram" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                </a>
+
+                <!-- Telegram -->
+                <a href="https://t.me/+c093M4u4lIxkNDVk" class="social-link telegram" aria-label="Telegram">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.18l-1.92 9.07c-.14.63-.52.79-1.05.49l-2.93-2.16-1.41 1.36c-.16.16-.29.29-.6.29l.21-2.98 5.43-4.9c.24-.21-.05-.33-.37-.12l-6.71 4.22-2.89-.9c-.63-.2-1.07-.63-.03-.9l11.29-4.36c.52-.19.98.12.82.76z"/></svg>
+                </a>
+                
+                <!-- YouTube -->
+                <a href="https://www.youtube.com/@Pas-Tech" class="social-link youtube" aria-label="YouTube">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/pasquale-gigliosetto-b542bb276/" class="social-link linkedin" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+            </div>
+        </header>
+
+        <main class="cta-container">
+            <!-- Pulsante GitHub -->
+            <a href="https://github.com/Pastech" class="btn">
+                <span class="btn-content">
+                    <svg class="btn-icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    <span id="text-github">Progetti GitHub</span>
+                </span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+
+            <!-- Pulsante Guide Google Drive -->
+            <a href="https://drive.google.com" class="btn">
+                <span class="btn-content">
+                    <svg class="btn-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span id="text-guides">Guide</span>
+                </span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+        </main>
+    </div>
+
+    <!-- Script del Cervello Cibernetico Procedurale e Codice Binario -->
+    <script>
+        const canvas = document.getElementById('cyber-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let tracks = [];
+        let binaryStreams = [];
+        let glassPanelRect = null; // Memorizza la posizione e i confini esatti della lastra di vetro
+        
+        // Piste molto definite, spesse e opache
+        const trackColor = 'rgba(0, 195, 255, 0.45)'; // Azzurro neon ad alta opacità
+        const nodeColor = 'rgba(0, 230, 255, 0.75)';  // Saldature luminose
+        const pulseColor = '#00f0ff'; // Impulsi di dati cyan brillante
+
+        // TRADUZIONI DIZIONARIO BILINGUE
+        const translations = {
+            it: {
+                bio: "Cybersecurity | Hacker Etico",
+                github: "Progetti GitHub",
+                guides: "Guide Tecniche"
+            },
+            en: {
+                bio: "Cybersecurity | Ethical Hacker",
+                github: "GitHub Projects",
+                guides: "Technical Guides"
+            }
+        };
+
+        let currentLang = 'it';
+
+        // Funzione per impostare la lingua attiva e tradurre la UI
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Aggiorna classi bottoni del selettore lingua
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            if (lang === 'it') {
+                document.getElementById('btn-it').classList.add('active');
+            } else {
+                document.getElementById('btn-en').classList.add('active');
+            }
+
+            // Traduce gli elementi di testo
+            document.getElementById('text-bio').innerText = translations[lang].bio;
+            document.getElementById('text-github').innerText = translations[lang].github;
+            document.getElementById('text-guides').innerText = translations[lang].guides;
+        }
+
+        function getGlassPanelDimensions() {
+            const panel = document.getElementById('main-glass-panel');
+            if (panel) {
+                const rect = panel.getBoundingClientRect();
+                glassPanelRect = {
+                    left: rect.left,
+                    right: rect.right,
+                    top: rect.top,
+                    bottom: rect.bottom,
+                    width: rect.width,
+                    height: rect.height
+                };
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            getGlassPanelDimensions();
+            generateCyberBrain();
+            generateBinaryStreams();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // Classe per gestire le piste del circuito all'interno del cervello
+        class CyberTrack {
+            constructor(points) {
+                this.points = points;
+                this.pulsePosition = Math.random();
+                this.pulseSpeed = 0.002 + Math.random() * 0.003;
+                this.pulseSize = 2.8; 
+            }
+
+            drawTrack() {
+                ctx.strokeStyle = trackColor;
+                ctx.lineWidth = 1.6;
+                ctx.beginPath();
+                ctx.moveTo(this.points[0].x, this.points[0].y);
+                for (let i = 1; i < this.points.length; i++) {
+                    ctx.lineTo(this.points[i].x, this.points[i].y);
+                }
+                ctx.stroke();
+
+                // Saldature circolari alle estremità
+                ctx.fillStyle = nodeColor;
+                ctx.beginPath();
+                ctx.arc(this.points[0].x, this.points[0].y, 3.5, 0, Math.PI * 2);
+                ctx.arc(this.points[this.points.length - 1].x, this.points[this.points.length - 1].y, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawPulse() {
+                let totalLength = 0;
+                let segments = [];
+                
+                for (let i = 0; i < this.points.length - 1; i++) {
+                    let dx = this.points[i+1].x - this.points[i].x;
+                    let dy = this.points[i+1].y - this.points[i].y;
+                    let len = Math.sqrt(dx*dx + dy*dy);
+                    segments.push({from: this.points[i], to: this.points[i+1], length: len});
+                    totalLength += len;
+                }
+
+                let targetLength = this.pulsePosition * totalLength;
+                let currentLen = 0;
+                let currentPoint = this.points[0];
+
+                for (let i = 0; i < segments.length; i++) {
+                    if (currentLen + segments[i].length >= targetLength) {
+                        let ratio = (targetLength - currentLen) / segments[i].length;
+                        currentPoint = {
+                            x: segments[i].from.x + (segments[i].to.x - segments[i].from.x) * ratio,
+                            y: segments[i].from.y + (segments[i].to.y - segments[i].from.y) * ratio
+                        };
+                        break;
+                    }
+                    currentLen += segments[i].length;
+                }
+
+                // Bagliore neon pulsante intenso
+                ctx.save();
+                ctx.shadowColor = pulseColor;
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = '#ffffff'; 
+                ctx.beginPath();
+                ctx.arc(currentPoint.x, currentPoint.y, this.pulseSize, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            update() {
+                this.pulsePosition += this.pulseSpeed;
+                if (this.pulsePosition > 1) {
+                    this.pulsePosition = 0;
+                    this.pulseSpeed = 0.002 + Math.random() * 0.003;
+                }
+                ctx.shadowBlur = 0; // Prevenzione perdite di performance
+                this.drawTrack();
+                this.drawPulse();
+            }
+        }
+
+        // Classe per gestire i flussi fluttuanti di codice binario (Angoli in basso)
+        class BinaryStream {
+            constructor(x, y, speed, opacity, size) {
+                this.x = x;
+                this.y = y;
+                this.speed = speed;
+                this.opacity = opacity;
+                this.size = size;
+                this.chars = [];
+                this.length = 5 + Math.floor(Math.random() * 5);
+                this.generateChars();
+            }
+
+            generateChars() {
+                this.chars = [];
+                for (let i = 0; i < Math.length; i++) {
+                    this.chars.push(Math.random() > 0.5 ? "1" : "0");
+                }
+                // Fallback di sicurezza se la lunghezza si corrompe
+                if (this.chars.length === 0) {
+                    this.chars = ["0", "1", "1", "0", "1"];
+                }
+            }
+
+            draw() {
+                ctx.font = `${this.size}px 'Fira Code'`;
+                ctx.fillStyle = `rgba(0, 150, 255, ${this.opacity})`;
+                for (let i = 0; i < this.chars.length; i++) {
+                    ctx.fillText(this.chars[i], this.x, this.y + (i * this.size * 1.25));
+                }
+            }
+
+            update() {
+                this.y += this.speed;
+                if (Math.random() > 0.95) {
+                    this.generateChars();
+                }
+                if (this.y > canvas.height) {
+                    this.y = -80;
+                    this.x = Math.random() * canvas.width;
+                }
+                this.draw();
+            }
+        }
+
+        // NUOVA LOGICA: I circuiti nascono dal perimetro dello schermo e vanno a toccare TUTTI i quattro bordi del vetro
+        function generateCyberBrain() {
+            tracks = [];
+            if (!glassPanelRect) return;
+
+            const numTracks = 48; // Densità ottimale per riempire tutti i lati
+            
+            for (let i = 0; i < numTracks; i++) {
+                let points = [];
+                let startX, startY;
+                let targetX, targetY;
+
+                // Dividiamo la lastra in 4 zone di attracco: Sinistra, Destra, Sopra, Sotto
+                const edgeType = i % 4; 
+
+                if (edgeType === 0) {
+                    // ATTRACCO SINISTRA: Nasce a sinistra ed entra nel bordo sinistro del vetro
+                    startX = 10 + Math.random() * (glassPanelRect.left - 40);
+                    startY = Math.random() * canvas.height;
+                    targetX = glassPanelRect.left;
+                    targetY = glassPanelRect.top + 20 + Math.random() * (glassPanelRect.height - 40);
+                } 
+                else if (edgeType === 1) {
+                    // ATTRACCO DESTRA: Nasce a destra ed entra nel bordo destro del vetro
+                    startX = glassPanelRect.right + 40 + Math.random() * (canvas.width - glassPanelRect.right - 50);
+                    startY = Math.random() * canvas.height;
+                    targetX = glassPanelRect.right;
+                    targetY = glassPanelRect.top + 20 + Math.random() * (glassPanelRect.height - 40);
+                } 
+                else if (edgeType === 2) {
+                    // ATTRACCO SOPRA: Nasce in alto ed entra nel bordo superiore del vetro
+                    startX = Math.random() * canvas.width;
+                    startY = 10 + Math.random() * (glassPanelRect.top - 40);
+                    targetX = glassPanelRect.left + 20 + Math.random() * (glassPanelRect.width - 40);
+                    targetY = glassPanelRect.top;
+                } 
+                else {
+                    // ATTRACCO SOTTO: Nasce in basso ed entra nel bordo inferiore del vetro
+                    startX = Math.random() * canvas.width;
+                    startY = glassPanelRect.bottom + 40 + Math.random() * (canvas.height - glassPanelRect.bottom - 50);
+                    targetX = glassPanelRect.left + 20 + Math.random() * (glassPanelRect.width - 40);
+                    targetY = glassPanelRect.bottom;
+                }
+
+                // Generiamo il punto di partenza
+                points.push({x: startX, y: startY});
+
+                // Creazione della pista con una curva geometrica a 90° o 45° prima di attraccare sul bordo del vetro
+                let midX, midY;
+                if (edgeType === 0 || edgeType === 1) {
+                    // Piste orizzontali: si muovono verso la lastra, poi curvano verso l'attracco
+                    midX = startX + (targetX - startX) * 0.5;
+                    midY = startY;
+                    points.push({x: midX, y: midY});
+                    
+                    midX = midX;
+                    midY = targetY;
+                    points.push({x: midX, y: midY});
+                } else {
+                    // Piste verticali: si muovono verso la lastra, poi curvano verso l'attracco
+                    midX = startX;
+                    midY = startY + (targetY - startY) * 0.5;
+                    points.push({x: midX, y: midY});
+                    
+                    midX = targetX;
+                    midY = midY;
+                    points.push({x: midX, y: midY});
+                }
+
+                // Punto finale fisso sul bordo esatto della lastra di vetro
+                points.push({x: targetX, y: targetY});
+
+                tracks.push(new CyberTrack(points));
+            }
+        }
+
+        // Inizializza i flussi di codice binario sui contorni in modo bilanciato su tutti i lati
+        function generateBinaryStreams() {
+            binaryStreams = [];
+            if (!glassPanelRect) return;
+
+            const numStreams = 20; // Più righe di codice per riempire l'intero schermo
+            
+            for (let i = 0; i < numStreams; i++) {
+                let x, y;
+                const side = i % 4;
+
+                if (side === 0) {
+                    // A sinistra del vetro
+                    x = 10 + Math.random() * (glassPanelRect.left - 30);
+                    y = Math.random() * canvas.height;
+                } else if (side === 1) {
+                    // A destra del vetro
+                    x = glassPanelRect.right + 10 + Math.random() * (canvas.width - glassPanelRect.right - 30);
+                    y = Math.random() * canvas.height;
+                } else if (side === 2) {
+                    // Sopra il vetro (escluso il centro occupato dalla scheda)
+                    x = Math.random() * canvas.width;
+                    y = Math.random() * (glassPanelRect.top - 40);
+                    if (x > glassPanelRect.left && x < glassPanelRect.right) {
+                        x = Math.random() > 0.5 ? x - 150 : x + 150; // Sposta all'esterno
+                    }
+                } else {
+                    // Sotto il vetro
+                    x = Math.random() * canvas.width;
+                    y = glassPanelRect.bottom + 10 + Math.random() * (canvas.height - glassPanelRect.bottom - 40);
+                    if (x > glassPanelRect.left && x < glassPanelRect.right) {
+                        x = Math.random() > 0.5 ? x - 150 : x + 150; // Sposta all'esterno
+                    }
+                }
+                
+                let speed = 0.5 + Math.random() * 0.7;
+                let opacity = 0.15 + Math.random() * 0.18; 
+                let size = 11 + Math.floor(Math.random() * 6);
+
+                binaryStreams.push(new BinaryStream(x, y, speed, opacity, size));
+            }
+        }
+
+        // Loop di rendering continuo
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Disegna il Radial Glow (Aura Blu) dietro la lastra
+            const cx = canvas.width / 2;
+            const cy = canvas.height * 0.42;
+            const scale = Math.min(canvas.width * 0.48, canvas.height * 0.48, 250);
+            
+            let glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, scale * 1.3);
+            glow.addColorStop(0, 'rgba(0, 102, 255, 0.18)'); // Splendido alone blu soffuso
+            glow.addColorStop(0.5, 'rgba(0, 68, 255, 0.06)');
+            glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            
+            ctx.fillStyle = glow;
+            ctx.beginPath();
+            ctx.arc(cx, cy, scale * 1.3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Disegna e aggiorna le piste del cervello cibernetico
+            for (let i = 0; i < tracks.length; i++) {
+                tracks[i].update();
+            }
+
+            // Disegna e aggiorna il codice binario
+            for (let i = 0; i < binaryStreams.length; i++) {
+                binaryStreams[i].update();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        // Avvio all'inizializzazione del DOM
+        window.onload = function() {
+            // Inizializza lingua di default (Italiano)
+            setLanguage('it');
+            resizeCanvas();
+            animate();
+        };
+    </script>
+</body>
+</html>
